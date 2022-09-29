@@ -1,4 +1,4 @@
-use std::fmt;
+use std::{fmt};
 
 #[derive(PartialEq, Debug)]
 
@@ -13,22 +13,15 @@ impl fmt::Display for Clock {
     }
 }
 
+const MINUTES_IN_AN_HOUR: i32 = 60;
+const HOURS_IN_A_DAY: i32 = 24;
+
 impl Clock {
     fn normalize(hours: i32, minutes: i32) -> (i32, i32) {
-        let new_minutes: i32;
-        let mut hours_carry_over = 0;
-        if minutes < 0 && minutes % 60 != 0 {
-            new_minutes = (minutes % 60) + 60;
-            hours_carry_over = -1;
-        } else {
-            new_minutes = minutes % 60;
-        }
-        hours_carry_over = (minutes / 60) + hours_carry_over;
+        let new_minutes = minutes.rem_euclid(MINUTES_IN_AN_HOUR);
+        let hours_carry_over = minutes.div_euclid(MINUTES_IN_AN_HOUR);
 
-        let mut new_hours = (hours_carry_over + hours) % 24;
-        if new_hours < 0 {
-            new_hours = new_hours + 24; 
-        }
+        let new_hours = (hours_carry_over + hours).rem_euclid(HOURS_IN_A_DAY);
         (new_hours, new_minutes)
     }
 
