@@ -1,14 +1,14 @@
 use std::collections::{HashMap, HashSet};
 
-fn count_letters(word: &str) -> HashMap<char, u8> {
+fn count_letters(word: &str) -> HashMap<String, u8> {
     let mut letter_counts = HashMap::new();
     for c in word.chars() {
-        let lowercase_c = c.to_ascii_lowercase();
+        let lowercase_c = c.to_lowercase().to_string();
         let count = match letter_counts.get(&lowercase_c) {
-            Some(count) => count + 1,
+            Some(&count) => count,
             None => 0,
         };
-        letter_counts.insert(lowercase_c, count);
+        letter_counts.insert(lowercase_c, count + 1);
     }
     letter_counts
 }
