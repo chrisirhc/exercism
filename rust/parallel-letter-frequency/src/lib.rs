@@ -17,8 +17,10 @@ pub fn frequency(input: &[&str], worker_count: usize) -> HashMap<char, usize> {
             scope.spawn(move || {
                 for &input_s in chunk {
                     for c in input_s.chars() {
-                        print!("{:}", c);
-                        tx_c.send(c).unwrap();
+                        if !c.is_alphabetic() {
+                            continue;
+                        }
+                        tx_c.send(c.to_ascii_lowercase()).unwrap();
                     }
                 }
             });
