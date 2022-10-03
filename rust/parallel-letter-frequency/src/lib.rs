@@ -36,8 +36,6 @@ pub fn frequency(input: &[&str], worker_count: usize) -> HashMap<char, usize> {
                 char_counts.insert(c, 1);
             }
         }
-
-        println!("xyz z");
     });
 
     char_counts
