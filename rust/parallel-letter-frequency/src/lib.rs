@@ -1,10 +1,10 @@
 use std::collections::HashMap;
-use std::sync::mpsc::{self, Receiver};
+use std::sync::mpsc::{channel, Receiver, Sender};
 use crossbeam_utils::thread;
 
 pub fn frequency(input: &[&str], worker_count: usize) -> HashMap<char, usize> {
     // Naive way of concurrency, split up based on x number of workers to count concurrently by splitting the strings to multiple vectors.
-    let (tx, rx) = mpsc::channel();
+    let (tx, rx) = channel();
     let chunk_size = 1.max(input.len() / worker_count);
 
     let chunks = input.chunks(chunk_size);
@@ -22,7 +22,7 @@ pub fn frequency(input: &[&str], worker_count: usize) -> HashMap<char, usize> {
     count_chars_from_channel(rx)
 }
 
-fn process_chunk(chunk: &[&str], tx_c: mpsc::Sender<char>) {
+fn process_chunk(chunk: &[&str], tx_c: Sender<char>) {
     for &input_s in chunk {
         for c in input_s.chars() {
             if !c.is_alphabetic() {
